@@ -1,0 +1,2 @@
+# splittr
+Expense Splitter Application
