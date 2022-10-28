@@ -1,23 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import Inputs from './components/Inputs.js';
+import Datafeed from './components/Datafeed.js';
 
-function App() {
+const App = () => {
+  const [feed, setFeed] = useState([]);
+
+  const updateFeed = (name, activity, cost) => {
+    setFeed([
+      ...feed,
+      {
+        name: [name, activity, cost]
+      }
+    ])
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Inputs updateFeed={updateFeed} />
       </header>
+      <Datafeed feed={feed} />
     </div>
   );
 }
