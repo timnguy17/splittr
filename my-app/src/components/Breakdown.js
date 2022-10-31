@@ -1,31 +1,55 @@
 import { useState, useEffect } from 'react';
 
-const Breakdown  = (props) => {
-  const [payments, setPayments] = useState({});
+const Breakdown = ({reporters, data, payments}) => {
+  const [split, setSplit] = useState([]);
 
-  // useEffect(() => {
-  //   props.data.forEach((user) => {
-  //     if (!payments[user.reporter]) {
-  //       setPayments({...payments,
-  //         [user.reporter]: user.cost,
-  //       })
-  //     } else {
+  useEffect(() => {
+    if(Object.keys(payments).length > 1) {
+      setSplit([]);
+      const people = Object.keys(payments);
+      const valuesPaid = Object.values(payments);
 
-  //     }
-  //   })
-  // },[])
+      const sum = valuesPaid.reduce((acc, curr) => curr + acc);
+      const mean = sum / people.length;
 
-  // sampleData.forEach((user) => {
-  //   if (!payments[user.reporter]){
-  //     setpayments([...payments, ])
-  //   }
-  // })
-  // console.log('payments',payments)
+      const sortedPeople = people.sort((personA, personB) => payments[personA] - payments[personB]);
+      const sortedValuesPaid = sortedPeople.map((person) => payments[person] - mean);
+
+      let i = 0;
+      let j = sortedPeople.length - 1;
+      let debt;
+
+
+      while (i < j) {
+        debt = Math.min(-(sortedValuesPaid[i]), sortedValuesPaid[j]);
+        sortedValuesPaid[i] += debt;
+        sortedValuesPaid[j] -= debt;
+
+        console.log(`${sortedPeople[i]} owes ${sortedPeople[j]} $${debt}`);
+        setSplit([...split, `${sortedPeople[i]} owes ${sortedPeople[j]} $${debt}`])
+
+        if (sortedValuesPaid[i] === 0) {
+          i++;
+        }
+
+        if (sortedValuesPaid[j] === 0) {
+          j--;
+        }
+      }
+    }
+  }, [payments])
+  console.log(split)
 
   return (
-    <h1>
-      breakdown
-    </h1>
+    <>
+      <h1>
+        breakdown
+      </h1>
+      <div>
+        {split.map(s => <div>{s}</div>)}
+      </div>
+    </>
+
   )
 };
 

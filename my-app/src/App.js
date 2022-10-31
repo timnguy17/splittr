@@ -11,8 +11,6 @@ const App = () => {
   const [payments, setPayments] = useState({});
   const [data, setData] = useState([]);
 
-
-
   const addUser = (user) => {
     //no empty inputs
     if(user.length === 0){
@@ -33,6 +31,7 @@ const App = () => {
   };
 
   const updatePayments = (reporter, cost) => {
+    //if user exists then add payment amount, otherwise create user
     if(payments[reporter]) {
       setPayments({
         ...payments,
@@ -49,19 +48,13 @@ const App = () => {
   console.log(reporters);
   console.log(data);
   console.log('payments',payments)
-  // console.log({
-  //   John: 400,
-  //   Jane: 1000,
-  //   Bob: 100,
-  //   Dave: 900,
-  // })
 
   return (
     <>
       <AddReporter addUser={addUser}/>
       <Inputs reporters={reporters} updateData={updateData} updatePayments={updatePayments}/>
       <DisplayExpenses data={data}/>
-      <Breakdown reporters={reporters} data={data}/>
+      <Breakdown reporters={reporters} data={data} payments={payments}/>
     </>
   );
 }
